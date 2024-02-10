@@ -59,7 +59,7 @@ void inputparser::getNextToken()
     {
         size_t begin = current_pos;
         consumeChar();
-        while(isNumber(current_char) || current_char == '.' && checkNextchar() != '\n') consumeChar();
+        while((isNumber(current_char) || current_char == '.') && checkNextchar() != '\n') consumeChar();
         size_t length = current_pos - begin;
         tokenstring = content.substr(begin, length);
         if (length != 0) tokens.push_back(tokenstring);
