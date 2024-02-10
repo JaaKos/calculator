@@ -1,4 +1,4 @@
-##Command line infix-calculator made with c++
+## Command line infix-calculator made with c++
 
-###Usage demo:
+### Usage demo:
 ![](demo.png)
