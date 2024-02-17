@@ -1,5 +1,3 @@
-#include <iostream>
-#include <string>
 #include "inputparser.hpp"
 #include "calculator.hpp"
 
