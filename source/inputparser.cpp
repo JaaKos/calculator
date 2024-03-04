@@ -1,6 +1,6 @@
 #include "inputparser.hpp"
 
-inputparser::inputparser(std::string input) : current_char(' '), current_pos(-1) 
+inputparser::inputparser(std::string input) : current_char(' '), current_pos(-1)
 {
     content = removeTrailingWhiteSpace(input);
     content += " \n";
@@ -22,9 +22,7 @@ std::string inputparser::removeTrailingWhiteSpace(const std::string input)
 
 void inputparser::printStatus()
 {
-    std::cout << content << std::endl;
-    std::cout << "current character: " << current_char << std::endl;
-    std::cout << "current position: " << current_pos << std::endl;
+    for (std::string s : tokens) std::cout << s << std::endl;
 }
 
 char inputparser::checkNextchar()
@@ -80,6 +78,7 @@ void inputparser::getNextToken()
         case '/':
         case '(':
         case ')':
+        case '^':
             tokenstring.assign(1, current_char);
             tokens.push_back(tokenstring);
             consumeChar();

@@ -11,9 +11,10 @@ void calculator::establishValue()
     while (scanForBrackets()) tokens = handleBrackets(tokens);
     while (scanForOperations())
     {
+        tokens = getResultsPowers(tokens);
         tokens = getResultsMulDiv(tokens);
         tokens = getResultsAddSub(tokens);
-    } 
+    }
     for (std::string token : tokens) answers.push_back(std::stod(token));
 }
 
@@ -33,7 +34,7 @@ bool calculator::checkOperation(char input)
 {
     for (char i : ALLOWED_OPERATORS) if (input == i) return true;
     return false;
-} 
+}
 
 std::vector <std::string> calculator::handleBrackets(std::vector <std::string>& source)
 {
@@ -62,12 +63,13 @@ std::vector <std::string> calculator::handleBrackets(std::vector <std::string>& 
         if (insideBrackets)
         {
             tokenSublist.push_back(source[i]);
-        } 
+        }
     }
     for (int i = subListbegin; i < subListend; i++) source[i] = "deleted";
     while (tokenSublist.size() > 1)
     {
         //for (std::string token : tokenSublist) std::cout << token << " ";
+        tokenSublist = getResultsPowers(tokenSublist);
         tokenSublist = getResultsMulDiv(tokenSublist);
         tokenSublist = getResultsAddSub(tokenSublist);
     }
@@ -102,7 +104,7 @@ std::vector <std::string> calculator::getResultsMulDiv(std::vector <std::string>
                 std::cerr << "Error: Non-numeric value in calculation" << std::endl;
                 std::abort();
             }
-            
+
             if (source[i] == "*") result = num1 * num2;
             else if (source[i] == "/") result = num1 / num2;
             source[i-1] = "deleted";
@@ -115,7 +117,7 @@ std::vector <std::string> calculator::getResultsMulDiv(std::vector <std::string>
 
 std::vector <std::string> calculator::getResultsAddSub(std::vector <std::string>& source)
 {
-    
+
     for (int i = 1; i < source.size(); i++)
     {
         if (source[i] == "+" || source[i] == "-")
@@ -136,6 +138,33 @@ std::vector <std::string> calculator::getResultsAddSub(std::vector <std::string>
             source[i-1] = "deleted";
             source[i] = "deleted";
             source[i+1] = std::to_string(result);
+        }
+    }
+    return cleanVector(source);
+}
+
+std::vector <std::string> calculator::getResultsPowers(std::vector <std::string>& source)
+{
+
+    for (int i = source.size() - 1; i >= 0; i--)
+    {
+        if (source[i] == "^")
+        {
+            double result, num1, num2;
+            try
+            {
+                num1 = std::stod(source[i-1]);
+                num2 = std::stod(source[i+1]);
+            }
+            catch(const std::exception& e)
+            {
+                std::cerr << "Error: Non-numeric value in calculation" << std::endl;
+                std::abort();
+            }
+            result = std::pow(num1, num2);
+            source[i+1] = "deleted";
+            source[i] = "deleted";
+            source[i-1] = std::to_string(result);
         }
     }
     return cleanVector(source);
